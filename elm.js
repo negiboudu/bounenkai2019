@@ -5193,10 +5193,10 @@ var $author$project$Main$init = function (_v0) {
 var $author$project$Main$Rollstart = function (a) {
 	return {$: 'Rollstart', a: a};
 };
-var $elm$json$Json$Decode$int = _Json_decodeInt;
-var $author$project$Main$receiveMsg = _Platform_incomingPort('receiveMsg', $elm$json$Json$Decode$int);
+var $elm$json$Json$Decode$value = _Json_decodeValue;
+var $author$project$Main$rollstart = _Platform_incomingPort('rollstart', $elm$json$Json$Decode$value);
 var $author$project$Main$subscriptions = function (model) {
-	return $author$project$Main$receiveMsg($author$project$Main$Rollstart);
+	return $author$project$Main$rollstart($author$project$Main$Rollstart);
 };
 var $elm$core$List$drop = F2(
 	function (n, list) {
@@ -5507,11 +5507,10 @@ var $author$project$Main$update = F2(
 			case 'Rollend':
 				return _Utils_Tuple2(model, $author$project$Main$selectValue);
 			case 'Rollstart':
-				var num = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{rollstatus: num}),
+						{rollstatus: 2}),
 					$elm$core$Platform$Cmd$none);
 			default:
 				var num = msg.a;

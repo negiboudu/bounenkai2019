@@ -4,6 +4,7 @@ import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Json.Encode
 import Random
 
 
@@ -44,7 +45,7 @@ initializeList =
 type Msg
     = Rollend
     | RandomGenerate Int
-    | Rollstart Int
+    | Rollstart Json.Encode.Value
 
 
 port rollend : Int -> Cmd msg
@@ -61,8 +62,8 @@ update msg model =
         Rollend ->
             ( model, selectValue )
 
-        Rollstart num ->
-            ( { model | rollstatus = num }, Cmd.none )
+        Rollstart _ ->
+            ( { model | rollstatus = 2 }, Cmd.none )
 
         RandomGenerate num ->
             ( { model
@@ -72,12 +73,12 @@ update msg model =
             )
 
 
-port receiveMsg : (Int -> msg) -> Sub msg
+port rollstart : (Json.Encode.Value -> msg) -> Sub msg
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    receiveMsg Rollstart
+    rollstart Rollstart
 
 
 view : Model -> Html Msg
