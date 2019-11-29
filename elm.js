@@ -5182,46 +5182,222 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$Main$initializeList = A2($elm$core$List$range, 0, 99);
+var $author$project$Main$Model = F6(
+	function (rollstatus, tempSelection, waitTime, fullGroup, unselectedGroup, selectedGroup) {
+		return {fullGroup: fullGroup, rollstatus: rollstatus, selectedGroup: selectedGroup, tempSelection: tempSelection, unselectedGroup: unselectedGroup, waitTime: waitTime};
+	});
+var $author$project$Main$Stop = {$: 'Stop'};
+var $author$project$Main$createGroup = $elm$core$Array$toList(
+	A2($elm$core$Array$initialize, 100, $elm$core$Basics$identity));
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
-		{fullList: $author$project$Main$initializeList, rollstatus: 0, selectedList: _List_Nil, unselectedList: $author$project$Main$initializeList},
+		A6($author$project$Main$Model, $author$project$Main$Stop, 0, 100, $author$project$Main$createGroup, $author$project$Main$createGroup, $author$project$Main$createGroup),
 		$elm$core$Platform$Cmd$none);
+};
+var $author$project$Main$ComeonAnimationFrame = function (a) {
+	return {$: 'ComeonAnimationFrame', a: a};
 };
 var $author$project$Main$Rollstart = function (a) {
 	return {$: 'Rollstart', a: a};
 };
-var $elm$json$Json$Decode$value = _Json_decodeValue;
-var $author$project$Main$rollstart = _Platform_incomingPort('rollstart', $elm$json$Json$Decode$value);
-var $author$project$Main$subscriptions = function (model) {
-	return $author$project$Main$rollstart($author$project$Main$Rollstart);
+var $elm$core$Platform$Sub$batch = _Platform_batch;
+var $elm$browser$Browser$AnimationManager$Time = function (a) {
+	return {$: 'Time', a: a};
 };
-var $elm$core$List$drop = F2(
-	function (n, list) {
-		drop:
-		while (true) {
-			if (n <= 0) {
-				return list;
+var $elm$browser$Browser$AnimationManager$State = F3(
+	function (subs, request, oldTime) {
+		return {oldTime: oldTime, request: request, subs: subs};
+	});
+var $elm$browser$Browser$AnimationManager$init = $elm$core$Task$succeed(
+	A3($elm$browser$Browser$AnimationManager$State, _List_Nil, $elm$core$Maybe$Nothing, 0));
+var $elm$core$Process$kill = _Scheduler_kill;
+var $elm$browser$Browser$AnimationManager$now = _Browser_now(_Utils_Tuple0);
+var $elm$browser$Browser$AnimationManager$rAF = _Browser_rAF(_Utils_Tuple0);
+var $elm$core$Platform$sendToSelf = _Platform_sendToSelf;
+var $elm$core$Process$spawn = _Scheduler_spawn;
+var $elm$browser$Browser$AnimationManager$onEffects = F3(
+	function (router, subs, _v0) {
+		var request = _v0.request;
+		var oldTime = _v0.oldTime;
+		var _v1 = _Utils_Tuple2(request, subs);
+		if (_v1.a.$ === 'Nothing') {
+			if (!_v1.b.b) {
+				var _v2 = _v1.a;
+				return $elm$browser$Browser$AnimationManager$init;
 			} else {
-				if (!list.b) {
-					return list;
-				} else {
-					var x = list.a;
-					var xs = list.b;
-					var $temp$n = n - 1,
-						$temp$list = xs;
-					n = $temp$n;
-					list = $temp$list;
-					continue drop;
-				}
+				var _v4 = _v1.a;
+				return A2(
+					$elm$core$Task$andThen,
+					function (pid) {
+						return A2(
+							$elm$core$Task$andThen,
+							function (time) {
+								return $elm$core$Task$succeed(
+									A3(
+										$elm$browser$Browser$AnimationManager$State,
+										subs,
+										$elm$core$Maybe$Just(pid),
+										time));
+							},
+							$elm$browser$Browser$AnimationManager$now);
+					},
+					$elm$core$Process$spawn(
+						A2(
+							$elm$core$Task$andThen,
+							$elm$core$Platform$sendToSelf(router),
+							$elm$browser$Browser$AnimationManager$rAF)));
+			}
+		} else {
+			if (!_v1.b.b) {
+				var pid = _v1.a.a;
+				return A2(
+					$elm$core$Task$andThen,
+					function (_v3) {
+						return $elm$browser$Browser$AnimationManager$init;
+					},
+					$elm$core$Process$kill(pid));
+			} else {
+				return $elm$core$Task$succeed(
+					A3($elm$browser$Browser$AnimationManager$State, subs, request, oldTime));
 			}
 		}
 	});
+var $elm$time$Time$Posix = function (a) {
+	return {$: 'Posix', a: a};
+};
+var $elm$time$Time$millisToPosix = $elm$time$Time$Posix;
+var $elm$browser$Browser$AnimationManager$onSelfMsg = F3(
+	function (router, newTime, _v0) {
+		var subs = _v0.subs;
+		var oldTime = _v0.oldTime;
+		var send = function (sub) {
+			if (sub.$ === 'Time') {
+				var tagger = sub.a;
+				return A2(
+					$elm$core$Platform$sendToApp,
+					router,
+					tagger(
+						$elm$time$Time$millisToPosix(newTime)));
+			} else {
+				var tagger = sub.a;
+				return A2(
+					$elm$core$Platform$sendToApp,
+					router,
+					tagger(newTime - oldTime));
+			}
+		};
+		return A2(
+			$elm$core$Task$andThen,
+			function (pid) {
+				return A2(
+					$elm$core$Task$andThen,
+					function (_v1) {
+						return $elm$core$Task$succeed(
+							A3(
+								$elm$browser$Browser$AnimationManager$State,
+								subs,
+								$elm$core$Maybe$Just(pid),
+								newTime));
+					},
+					$elm$core$Task$sequence(
+						A2($elm$core$List$map, send, subs)));
+			},
+			$elm$core$Process$spawn(
+				A2(
+					$elm$core$Task$andThen,
+					$elm$core$Platform$sendToSelf(router),
+					$elm$browser$Browser$AnimationManager$rAF)));
+	});
+var $elm$browser$Browser$AnimationManager$Delta = function (a) {
+	return {$: 'Delta', a: a};
+};
+var $elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
+var $elm$browser$Browser$AnimationManager$subMap = F2(
+	function (func, sub) {
+		if (sub.$ === 'Time') {
+			var tagger = sub.a;
+			return $elm$browser$Browser$AnimationManager$Time(
+				A2($elm$core$Basics$composeL, func, tagger));
+		} else {
+			var tagger = sub.a;
+			return $elm$browser$Browser$AnimationManager$Delta(
+				A2($elm$core$Basics$composeL, func, tagger));
+		}
+	});
+_Platform_effectManagers['Browser.AnimationManager'] = _Platform_createManager($elm$browser$Browser$AnimationManager$init, $elm$browser$Browser$AnimationManager$onEffects, $elm$browser$Browser$AnimationManager$onSelfMsg, 0, $elm$browser$Browser$AnimationManager$subMap);
+var $elm$browser$Browser$AnimationManager$subscription = _Platform_leaf('Browser.AnimationManager');
+var $elm$browser$Browser$AnimationManager$onAnimationFrame = function (tagger) {
+	return $elm$browser$Browser$AnimationManager$subscription(
+		$elm$browser$Browser$AnimationManager$Time(tagger));
+};
+var $elm$browser$Browser$Events$onAnimationFrame = $elm$browser$Browser$AnimationManager$onAnimationFrame;
+var $elm$json$Json$Decode$value = _Json_decodeValue;
+var $author$project$Main$rollstart = _Platform_incomingPort('rollstart', $elm$json$Json$Decode$value);
+var $author$project$Main$subscriptions = function (model) {
+	return $elm$core$Platform$Sub$batch(
+		_List_fromArray(
+			[
+				$author$project$Main$rollstart($author$project$Main$Rollstart),
+				$elm$browser$Browser$Events$onAnimationFrame($author$project$Main$ComeonAnimationFrame)
+			]));
+};
 var $author$project$Main$RandomGenerate = function (a) {
 	return {$: 'RandomGenerate', a: a};
 };
+var $author$project$Main$Rolling = {$: 'Rolling'};
+var $elm$core$Array$fromListHelp = F3(
+	function (list, nodeList, nodeListSize) {
+		fromListHelp:
+		while (true) {
+			var _v0 = A2($elm$core$Elm$JsArray$initializeFromList, $elm$core$Array$branchFactor, list);
+			var jsArray = _v0.a;
+			var remainingItems = _v0.b;
+			if (_Utils_cmp(
+				$elm$core$Elm$JsArray$length(jsArray),
+				$elm$core$Array$branchFactor) < 0) {
+				return A2(
+					$elm$core$Array$builderToArray,
+					true,
+					{nodeList: nodeList, nodeListSize: nodeListSize, tail: jsArray});
+			} else {
+				var $temp$list = remainingItems,
+					$temp$nodeList = A2(
+					$elm$core$List$cons,
+					$elm$core$Array$Leaf(jsArray),
+					nodeList),
+					$temp$nodeListSize = nodeListSize + 1;
+				list = $temp$list;
+				nodeList = $temp$nodeList;
+				nodeListSize = $temp$nodeListSize;
+				continue fromListHelp;
+			}
+		}
+	});
+var $elm$core$Array$fromList = function (list) {
+	if (!list.b) {
+		return $elm$core$Array$empty;
+	} else {
+		return A3($elm$core$Array$fromListHelp, list, _List_Nil, 0);
+	}
+};
+var $elm$core$Array$filter = F2(
+	function (isGood, array) {
+		return $elm$core$Array$fromList(
+			A3(
+				$elm$core$Array$foldr,
+				F2(
+					function (x, xs) {
+						return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+					}),
+				_List_Nil,
+				array));
+	});
 var $elm$random$Random$Generate = function (a) {
 	return {$: 'Generate', a: a};
 };
@@ -5255,10 +5431,6 @@ var $elm$time$Time$Zone = F2(
 		return {$: 'Zone', a: a, b: b};
 	});
 var $elm$time$Time$customZone = $elm$time$Time$Zone;
-var $elm$time$Time$Posix = function (a) {
-	return {$: 'Posix', a: a};
-};
-var $elm$time$Time$millisToPosix = $elm$time$Time$Posix;
 var $elm$time$Time$now = _Time_now($elm$time$Time$millisToPosix);
 var $elm$time$Time$posixToMillis = function (_v0) {
 	var millis = _v0.a;
@@ -5371,166 +5543,58 @@ var $elm$random$Random$int = F2(
 				}
 			});
 	});
-var $author$project$Main$selectValue = A2(
-	$elm$random$Random$generate,
-	$author$project$Main$RandomGenerate,
-	A2($elm$random$Random$int, 0, 99));
-var $elm$core$List$takeReverse = F3(
-	function (n, list, kept) {
-		takeReverse:
-		while (true) {
-			if (n <= 0) {
-				return kept;
-			} else {
-				if (!list.b) {
-					return kept;
-				} else {
-					var x = list.a;
-					var xs = list.b;
-					var $temp$n = n - 1,
-						$temp$list = xs,
-						$temp$kept = A2($elm$core$List$cons, x, kept);
-					n = $temp$n;
-					list = $temp$list;
-					kept = $temp$kept;
-					continue takeReverse;
-				}
-			}
-		}
-	});
-var $elm$core$List$takeTailRec = F2(
-	function (n, list) {
-		return $elm$core$List$reverse(
-			A3($elm$core$List$takeReverse, n, list, _List_Nil));
-	});
-var $elm$core$List$takeFast = F3(
-	function (ctr, n, list) {
-		if (n <= 0) {
-			return _List_Nil;
-		} else {
-			var _v0 = _Utils_Tuple2(n, list);
-			_v0$1:
-			while (true) {
-				_v0$5:
-				while (true) {
-					if (!_v0.b.b) {
-						return list;
-					} else {
-						if (_v0.b.b.b) {
-							switch (_v0.a) {
-								case 1:
-									break _v0$1;
-								case 2:
-									var _v2 = _v0.b;
-									var x = _v2.a;
-									var _v3 = _v2.b;
-									var y = _v3.a;
-									return _List_fromArray(
-										[x, y]);
-								case 3:
-									if (_v0.b.b.b.b) {
-										var _v4 = _v0.b;
-										var x = _v4.a;
-										var _v5 = _v4.b;
-										var y = _v5.a;
-										var _v6 = _v5.b;
-										var z = _v6.a;
-										return _List_fromArray(
-											[x, y, z]);
-									} else {
-										break _v0$5;
-									}
-								default:
-									if (_v0.b.b.b.b && _v0.b.b.b.b.b) {
-										var _v7 = _v0.b;
-										var x = _v7.a;
-										var _v8 = _v7.b;
-										var y = _v8.a;
-										var _v9 = _v8.b;
-										var z = _v9.a;
-										var _v10 = _v9.b;
-										var w = _v10.a;
-										var tl = _v10.b;
-										return (ctr > 1000) ? A2(
-											$elm$core$List$cons,
-											x,
-											A2(
-												$elm$core$List$cons,
-												y,
-												A2(
-													$elm$core$List$cons,
-													z,
-													A2(
-														$elm$core$List$cons,
-														w,
-														A2($elm$core$List$takeTailRec, n - 4, tl))))) : A2(
-											$elm$core$List$cons,
-											x,
-											A2(
-												$elm$core$List$cons,
-												y,
-												A2(
-													$elm$core$List$cons,
-													z,
-													A2(
-														$elm$core$List$cons,
-														w,
-														A3($elm$core$List$takeFast, ctr + 1, n - 4, tl)))));
-									} else {
-										break _v0$5;
-									}
-							}
-						} else {
-							if (_v0.a === 1) {
-								break _v0$1;
-							} else {
-								break _v0$5;
-							}
-						}
-					}
-				}
-				return list;
-			}
-			var _v1 = _v0.b;
-			var x = _v1.a;
-			return _List_fromArray(
-				[x]);
-		}
-	});
-var $elm$core$List$take = F2(
-	function (n, list) {
-		return A3($elm$core$List$takeFast, 0, n, list);
-	});
+var $elm$core$Basics$neq = _Utils_notEqual;
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
-			case 'Rollend':
-				return _Utils_Tuple2(model, $author$project$Main$selectValue);
 			case 'Rollstart':
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{rollstatus: 2}),
+						{rollstatus: $author$project$Main$Rolling, waitTime: model.waitTime + 100}),
 					$elm$core$Platform$Cmd$none);
-			default:
-				var num = msg.a;
+			case 'Rollend':
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							selectedList: _Utils_ap(
-								model.selectedList,
+							rollstatus: $author$project$Main$Stop,
+							selectedGroup: _Utils_ap(
+								model.selectedGroup,
+								_List_fromArray(
+									[model.tempSelection])),
+							unselectedGroup: $elm$core$Array$toList(
 								A2(
-									$elm$core$List$take,
-									1,
-									A2($elm$core$List$drop, num, model.unselectedList)))
+									$elm$core$Array$filter,
+									function (val) {
+										return !_Utils_eq(val, model.tempSelection);
+									},
+									$elm$core$Array$fromList(model.unselectedGroup)))
 						}),
 					$elm$core$Platform$Cmd$none);
+			case 'RandomGenerate':
+				var num = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{tempSelection: num}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				return _Utils_Tuple2(
+					model,
+					_Utils_eq(model.rollstatus, $author$project$Main$Rolling) ? A2(
+						$elm$random$Random$generate,
+						$author$project$Main$RandomGenerate,
+						A2(
+							$elm$random$Random$int,
+							0,
+							$elm$core$List$length(model.unselectedGroup))) : $elm$core$Platform$Cmd$none);
 		}
 	});
 var $author$project$Main$Rollend = {$: 'Rollend'};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$div = _VirtualDom_node('div');
+var $elm$json$Json$Encode$int = _Json_wrap;
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
 };
@@ -5554,6 +5618,7 @@ var $elm$html$Html$table = _VirtualDom_node('table');
 var $elm$html$Html$td = _VirtualDom_node('td');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $elm$core$Debug$toString = _Debug_toString;
 var $elm$html$Html$tr = _VirtualDom_node('tr');
 var $author$project$Main$view = function (model) {
 	return A2(
@@ -5561,6 +5626,18 @@ var $author$project$Main$view = function (model) {
 		_List_Nil,
 		_List_fromArray(
 			[
+				A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Events$onClick(
+						$author$project$Main$Rollstart(
+							$elm$json$Json$Encode$int(0)))
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('まわす')
+					])),
 				A2(
 				$elm$html$Html$button,
 				_List_fromArray(
@@ -5577,7 +5654,7 @@ var $author$project$Main$view = function (model) {
 				_List_fromArray(
 					[
 						$elm$html$Html$text(
-						'rollstatus:' + $elm$core$String$fromInt(model.rollstatus))
+						'rollstatus:' + $elm$core$Debug$toString(model))
 					])),
 				A2(
 				$elm$html$Html$table,
@@ -5605,7 +5682,7 @@ var $author$project$Main$view = function (model) {
 							A2(
 								$elm$core$List$map,
 								$elm$html$Html$text,
-								A2($elm$core$List$map, $elm$core$String$fromInt, model.fullList))))
+								A2($elm$core$List$map, $elm$core$String$fromInt, model.fullGroup))))
 					]))
 			]));
 };
