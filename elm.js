@@ -5732,7 +5732,316 @@ var $author$project$Main$update = F2(
 		}
 	});
 var $elm$html$Html$button = _VirtualDom_node('button');
+var $elm$virtual_dom$VirtualDom$attribute = F2(
+	function (key, value) {
+		return A2(
+			_VirtualDom_attribute,
+			_VirtualDom_noOnOrFormAction(key),
+			_VirtualDom_noJavaScriptOrHtmlUri(value));
+	});
+var $elm$html$Html$Attributes$attribute = $elm$virtual_dom$VirtualDom$attribute;
+var $arowM$elm_mixin$Mixin$Mixin = function (a) {
+	return {$: 'Mixin', a: a};
+};
+var $arowM$elm_mixin$Mixin$fromAttribute = function (attr) {
+	return $arowM$elm_mixin$Mixin$Mixin(
+		_List_fromArray(
+			[attr]));
+};
+var $arowM$elm_neat_layout$Neat$Layout$Column$flex = $arowM$elm_mixin$Mixin$fromAttribute(
+	A2($elm$html$Html$Attributes$attribute, 'data-elm-neat-layout', 'flex'));
+var $elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
+		}
+	});
+var $elm$core$List$concat = function (lists) {
+	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
+};
+var $elm$core$List$concatMap = F2(
+	function (f, list) {
+		return $elm$core$List$concat(
+			A2($elm$core$List$map, f, list));
+	});
+var $arowM$elm_mixin$Mixin$fromAttributes = $arowM$elm_mixin$Mixin$Mixin;
+var $arowM$elm_mixin$Mixin$toAttributes = function (_v0) {
+	var attrs = _v0.a;
+	return attrs;
+};
+var $arowM$elm_mixin$Mixin$batch = function (ls) {
+	return $arowM$elm_mixin$Mixin$fromAttributes(
+		A2($elm$core$List$concatMap, $arowM$elm_mixin$Mixin$toAttributes, ls));
+};
+var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
+var $arowM$elm_neat_layout$Neat$Layout$Column$style = F2(
+	function (k, v) {
+		return $arowM$elm_mixin$Mixin$fromAttribute(
+			A2($elm$html$Html$Attributes$style, k, v));
+	});
+var $arowM$elm_neat_layout$Neat$Layout$Column$flexDirection = $arowM$elm_mixin$Mixin$batch(
+	_List_fromArray(
+		[
+			A2($arowM$elm_neat_layout$Neat$Layout$Column$style, '-ms-flex-direction', 'column'),
+			A2($arowM$elm_neat_layout$Neat$Layout$Column$style, 'flex-direction', 'column')
+		]));
+var $arowM$elm_neat_layout$Neat$Layout$Column$flexWrap = function (b) {
+	return b ? $arowM$elm_mixin$Mixin$batch(
+		_List_fromArray(
+			[
+				A2($arowM$elm_neat_layout$Neat$Layout$Column$style, '-ms-flex-wrap', 'wrap'),
+				A2($arowM$elm_neat_layout$Neat$Layout$Column$style, 'flex-wrap', 'wrap')
+			])) : $arowM$elm_mixin$Mixin$batch(
+		_List_fromArray(
+			[
+				A2($arowM$elm_neat_layout$Neat$Layout$Column$style, '-ms-flex-wrap', 'nowrap'),
+				A2($arowM$elm_neat_layout$Neat$Layout$Column$style, 'flex-wrap', 'nowrap')
+			]));
+};
+var $arowM$elm_neat_layout$Neat$Layout$Column$horizontal = function (hor) {
+	return $arowM$elm_mixin$Mixin$batch(
+		function () {
+			switch (hor.$) {
+				case 'Left':
+					return _List_fromArray(
+						[
+							A2($arowM$elm_neat_layout$Neat$Layout$Column$style, '-ms-flex-align', 'start'),
+							A2($arowM$elm_neat_layout$Neat$Layout$Column$style, 'align-items', 'flex-start')
+						]);
+				case 'Right':
+					return _List_fromArray(
+						[
+							A2($arowM$elm_neat_layout$Neat$Layout$Column$style, '-ms-flex-align', 'end'),
+							A2($arowM$elm_neat_layout$Neat$Layout$Column$style, 'align-items', 'flex-end')
+						]);
+				case 'HCenter':
+					return _List_fromArray(
+						[
+							A2($arowM$elm_neat_layout$Neat$Layout$Column$style, '-ms-flex-align', 'center'),
+							A2($arowM$elm_neat_layout$Neat$Layout$Column$style, 'align-items', 'center')
+						]);
+				default:
+					return _List_fromArray(
+						[
+							A2($arowM$elm_neat_layout$Neat$Layout$Column$style, '-ms-flex-align', 'stretch'),
+							A2($arowM$elm_neat_layout$Neat$Layout$Column$style, 'align-items', 'stretch')
+						]);
+			}
+		}());
+};
+var $arowM$elm_neat_layout$Neat$Layout$Column$vertical = function (ver) {
+	return $arowM$elm_mixin$Mixin$batch(
+		function () {
+			switch (ver.$) {
+				case 'Top':
+					return _List_fromArray(
+						[
+							A2($arowM$elm_neat_layout$Neat$Layout$Column$style, '-ms-flex-pack', 'start'),
+							A2($arowM$elm_neat_layout$Neat$Layout$Column$style, 'justify-content', 'flex-start')
+						]);
+				case 'Bottom':
+					return _List_fromArray(
+						[
+							A2($arowM$elm_neat_layout$Neat$Layout$Column$style, '-ms-flex-pack', 'end'),
+							A2($arowM$elm_neat_layout$Neat$Layout$Column$style, 'justify-content', 'flex-end')
+						]);
+				case 'VCenter':
+					return _List_fromArray(
+						[
+							A2($arowM$elm_neat_layout$Neat$Layout$Column$style, '-ms-flex-pack', 'center'),
+							A2($arowM$elm_neat_layout$Neat$Layout$Column$style, 'justify-content', 'center')
+						]);
+				case 'SpaceBetween':
+					return _List_fromArray(
+						[
+							A2($arowM$elm_neat_layout$Neat$Layout$Column$style, '-ms-flex-pack', 'justify'),
+							A2($arowM$elm_neat_layout$Neat$Layout$Column$style, 'justify-content', 'space-between')
+						]);
+				default:
+					return _List_fromArray(
+						[
+							A2($arowM$elm_neat_layout$Neat$Layout$Column$style, '-ms-flex-pack', 'distribute'),
+							A2($arowM$elm_neat_layout$Neat$Layout$Column$style, 'justify-content', 'space-around')
+						]);
+			}
+		}());
+};
+var $arowM$elm_neat_layout$Neat$Layout$Column$columnMixins = function (align) {
+	return _List_fromArray(
+		[
+			$arowM$elm_neat_layout$Neat$Layout$Column$flex,
+			$arowM$elm_neat_layout$Neat$Layout$Column$flexDirection,
+			$arowM$elm_neat_layout$Neat$Layout$Column$horizontal(align.horizontal),
+			$arowM$elm_neat_layout$Neat$Layout$Column$vertical(align.vertical),
+			$arowM$elm_neat_layout$Neat$Layout$Column$flexWrap(align.wrap)
+		]);
+};
+var $arowM$elm_neat_layout$Neat$Layout$Internal$Layout = function (a) {
+	return {$: 'Layout', a: a};
+};
+var $arowM$elm_neat_layout$Neat$Layout$Internal$fromRecord = $arowM$elm_neat_layout$Neat$Layout$Internal$Layout;
+var $arowM$elm_mixin$Mixin$none = $arowM$elm_mixin$Mixin$Mixin(_List_Nil);
+var $arowM$elm_neat_layout$Neat$View = function (a) {
+	return {$: 'View', a: a};
+};
+var $arowM$elm_neat_layout$Neat$Layout$Internal$toRecord = function (_v0) {
+	var layout_ = _v0.a;
+	return layout_;
+};
+var $arowM$elm_neat_layout$Neat$Layout$Internal$batch = function (ls) {
+	return $arowM$elm_neat_layout$Neat$Layout$Internal$fromRecord(
+		{
+			inner: $arowM$elm_mixin$Mixin$batch(
+				A2(
+					$elm$core$List$map,
+					A2(
+						$elm$core$Basics$composeL,
+						function ($) {
+							return $.inner;
+						},
+						$arowM$elm_neat_layout$Neat$Layout$Internal$toRecord),
+					ls)),
+			outer: $arowM$elm_mixin$Mixin$batch(
+				A2(
+					$elm$core$List$map,
+					A2(
+						$elm$core$Basics$composeL,
+						function ($) {
+							return $.outer;
+						},
+						$arowM$elm_neat_layout$Neat$Layout$Internal$toRecord),
+					ls))
+		});
+};
+var $arowM$elm_neat_layout$Neat$setLayout = F2(
+	function (layout, _v0) {
+		var f = _v0.a;
+		return $arowM$elm_neat_layout$Neat$View(
+			F3(
+				function (p, extra, appearance) {
+					return A3(
+						f,
+						p,
+						$arowM$elm_neat_layout$Neat$Layout$Internal$batch(
+							_List_fromArray(
+								[layout, extra])),
+						appearance);
+				}));
+	});
+var $arowM$elm_neat_layout$Neat$Layout$Column$expandH = function (h) {
+	if (h.$ === 'Stretch') {
+		return $arowM$elm_neat_layout$Neat$setLayout(
+			$arowM$elm_neat_layout$Neat$Layout$Internal$fromRecord(
+				{
+					inner: A2($arowM$elm_neat_layout$Neat$Layout$Column$style, 'width', '100%'),
+					outer: $arowM$elm_mixin$Mixin$none
+				}));
+	} else {
+		return $elm$core$Basics$identity;
+	}
+};
 var $elm$html$Html$div = _VirtualDom_node('div');
+var $arowM$elm_neat_layout$Neat$fromHtml = $arowM$elm_neat_layout$Neat$View;
+var $arowM$elm_neat_layout$Neat$prohibited = $arowM$elm_mixin$Mixin$fromAttributes(
+	_List_fromArray(
+		[
+			A2($elm$html$Html$Attributes$style, 'padding', '0'),
+			A2($elm$html$Html$Attributes$style, 'margin', '0')
+		]));
+var $elm$core$String$fromFloat = _String_fromNumber;
+var $arowM$elm_neat_layout$Neat$wrapHtml = F3(
+	function (pad, outer, c) {
+		return (!pad) ? c : A2(
+			$elm$html$Html$div,
+			A2(
+				$elm$core$List$cons,
+				A2(
+					$elm$html$Html$Attributes$style,
+					'padding',
+					$elm$core$String$fromFloat(pad) + 'rem'),
+				$arowM$elm_mixin$Mixin$toAttributes(outer)),
+			_List_fromArray(
+				[c]));
+	});
+var $arowM$elm_neat_layout$Neat$liftHelper = F4(
+	function (special, node, appearances, children) {
+		return $arowM$elm_neat_layout$Neat$fromHtml(
+			F3(
+				function (pad, _v0, extra) {
+					var layout_ = _v0.a;
+					return A3(
+						$arowM$elm_neat_layout$Neat$wrapHtml,
+						pad,
+						layout_.outer,
+						A2(
+							node,
+							$arowM$elm_mixin$Mixin$toAttributes(
+								$arowM$elm_mixin$Mixin$batch(
+									_List_fromArray(
+										[
+											$arowM$elm_mixin$Mixin$batch(appearances),
+											extra,
+											$arowM$elm_neat_layout$Neat$prohibited,
+											special,
+											(!pad) ? layout_.outer : layout_.inner
+										]))),
+							children));
+				}));
+	});
+var $arowM$elm_neat_layout$Neat$Layout$Internal$none = $arowM$elm_neat_layout$Neat$Layout$Internal$Layout(
+	{inner: $arowM$elm_mixin$Mixin$none, outer: $arowM$elm_mixin$Mixin$none});
+var $arowM$elm_neat_layout$Neat$toHtml = F4(
+	function (p, layout, appearance, _v0) {
+		var f = _v0.a;
+		return A3(f, p, layout, appearance);
+	});
+var $arowM$elm_neat_layout$Neat$lift = F3(
+	function (node, appearances, children) {
+		return A4(
+			$arowM$elm_neat_layout$Neat$liftHelper,
+			$arowM$elm_mixin$Mixin$none,
+			node,
+			appearances,
+			A2(
+				$elm$core$List$map,
+				A3($arowM$elm_neat_layout$Neat$toHtml, 0, $arowM$elm_neat_layout$Neat$Layout$Internal$none, $arowM$elm_mixin$Mixin$none),
+				children));
+	});
+var $arowM$elm_neat_layout$Neat$div = $arowM$elm_neat_layout$Neat$lift($elm$html$Html$div);
+var $elm$virtual_dom$VirtualDom$node = function (tag) {
+	return _VirtualDom_node(
+		_VirtualDom_noScript(tag));
+};
+var $elm$html$Html$node = $elm$virtual_dom$VirtualDom$node;
+var $arowM$elm_neat_layout$Neat$Layout$Column$wrapper = function (align) {
+	var _v0 = align.nodeName;
+	if (_v0 === 'div') {
+		return $arowM$elm_neat_layout$Neat$div;
+	} else {
+		var a = _v0;
+		return $arowM$elm_neat_layout$Neat$lift(
+			$elm$html$Html$node(a));
+	}
+};
+var $arowM$elm_neat_layout$Neat$Layout$Column$columnWith = F2(
+	function (align, children) {
+		return A3(
+			$arowM$elm_neat_layout$Neat$Layout$Column$wrapper,
+			align,
+			$arowM$elm_neat_layout$Neat$Layout$Column$columnMixins(align),
+			A2(
+				$elm$core$List$map,
+				$arowM$elm_neat_layout$Neat$Layout$Column$expandH(align.horizontal),
+				children));
+	});
+var $arowM$elm_neat_layout$Neat$Layout$Column$Left = {$: 'Left'};
+var $arowM$elm_neat_layout$Neat$Layout$Column$Top = {$: 'Top'};
+var $arowM$elm_neat_layout$Neat$Layout$Column$defaultColumn = {horizontal: $arowM$elm_neat_layout$Neat$Layout$Column$Left, nodeName: 'div', vertical: $arowM$elm_neat_layout$Neat$Layout$Column$Top, wrap: false};
+var $arowM$elm_neat_layout$Neat$Layout$Column$column = $arowM$elm_neat_layout$Neat$Layout$Column$columnWith($arowM$elm_neat_layout$Neat$Layout$Column$defaultColumn);
+var $arowM$elm_neat_layout$Neat$Layout$column = $arowM$elm_neat_layout$Neat$Layout$Column$column;
 var $elm$json$Json$Encode$int = _Json_wrap;
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
@@ -5751,69 +6060,220 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
-var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
-var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
-var $elm$html$Html$table = _VirtualDom_node('table');
-var $elm$html$Html$td = _VirtualDom_node('td');
+var $arowM$elm_neat_layout$Neat$Layout$Row$Left = {$: 'Left'};
+var $arowM$elm_neat_layout$Neat$Layout$Row$Top = {$: 'Top'};
+var $arowM$elm_neat_layout$Neat$Layout$Row$defaultRow = {horizontal: $arowM$elm_neat_layout$Neat$Layout$Row$Left, nodeName: 'div', vertical: $arowM$elm_neat_layout$Neat$Layout$Row$Top, wrap: false};
+var $arowM$elm_neat_layout$Neat$Layout$Row$style = F2(
+	function (k, v) {
+		return $arowM$elm_mixin$Mixin$fromAttribute(
+			A2($elm$html$Html$Attributes$style, k, v));
+	});
+var $arowM$elm_neat_layout$Neat$Layout$Row$expandV = function (v) {
+	if (v.$ === 'Stretch') {
+		return $arowM$elm_neat_layout$Neat$setLayout(
+			$arowM$elm_neat_layout$Neat$Layout$Internal$fromRecord(
+				{
+					inner: A2($arowM$elm_neat_layout$Neat$Layout$Row$style, 'height', '100%'),
+					outer: $arowM$elm_mixin$Mixin$none
+				}));
+	} else {
+		return $elm$core$Basics$identity;
+	}
+};
+var $arowM$elm_neat_layout$Neat$Layout$Row$flex = $arowM$elm_mixin$Mixin$fromAttribute(
+	A2($elm$html$Html$Attributes$attribute, 'data-elm-neat-layout', 'flex'));
+var $arowM$elm_neat_layout$Neat$Layout$Row$flexDirection = $arowM$elm_mixin$Mixin$batch(
+	_List_fromArray(
+		[
+			A2($arowM$elm_neat_layout$Neat$Layout$Row$style, '-ms-flex-direction', 'row'),
+			A2($arowM$elm_neat_layout$Neat$Layout$Row$style, 'flex-direction', 'row')
+		]));
+var $arowM$elm_neat_layout$Neat$Layout$Row$flexWrap = function (b) {
+	return b ? $arowM$elm_mixin$Mixin$batch(
+		_List_fromArray(
+			[
+				A2($arowM$elm_neat_layout$Neat$Layout$Row$style, '-ms-flex-wrap', 'wrap'),
+				A2($arowM$elm_neat_layout$Neat$Layout$Row$style, 'flex-wrap', 'wrap')
+			])) : $arowM$elm_mixin$Mixin$batch(
+		_List_fromArray(
+			[
+				A2($arowM$elm_neat_layout$Neat$Layout$Row$style, '-ms-flex-wrap', 'nowrap'),
+				A2($arowM$elm_neat_layout$Neat$Layout$Row$style, 'flex-wrap', 'nowrap')
+			]));
+};
+var $arowM$elm_neat_layout$Neat$Layout$Row$horizontal = function (hor) {
+	return $arowM$elm_mixin$Mixin$batch(
+		function () {
+			switch (hor.$) {
+				case 'Left':
+					return _List_fromArray(
+						[
+							A2($arowM$elm_neat_layout$Neat$Layout$Row$style, '-ms-flex-pack', 'start'),
+							A2($arowM$elm_neat_layout$Neat$Layout$Row$style, 'justify-content', 'flex-start')
+						]);
+				case 'Right':
+					return _List_fromArray(
+						[
+							A2($arowM$elm_neat_layout$Neat$Layout$Row$style, '-ms-flex-pack', 'end'),
+							A2($arowM$elm_neat_layout$Neat$Layout$Row$style, 'justify-content', 'flex-end')
+						]);
+				case 'HCenter':
+					return _List_fromArray(
+						[
+							A2($arowM$elm_neat_layout$Neat$Layout$Row$style, '-ms-flex-pack', 'center'),
+							A2($arowM$elm_neat_layout$Neat$Layout$Row$style, 'justify-content', 'center')
+						]);
+				case 'SpaceBetween':
+					return _List_fromArray(
+						[
+							A2($arowM$elm_neat_layout$Neat$Layout$Row$style, '-ms-flex-pack', 'justify'),
+							A2($arowM$elm_neat_layout$Neat$Layout$Row$style, 'justify-content', 'space-between')
+						]);
+				default:
+					return _List_fromArray(
+						[
+							A2($arowM$elm_neat_layout$Neat$Layout$Row$style, '-ms-flex-pack', 'distribute'),
+							A2($arowM$elm_neat_layout$Neat$Layout$Row$style, 'justify-content', 'space-around')
+						]);
+			}
+		}());
+};
+var $arowM$elm_neat_layout$Neat$Layout$Row$vertical = function (ver) {
+	return $arowM$elm_mixin$Mixin$batch(
+		function () {
+			switch (ver.$) {
+				case 'Top':
+					return _List_fromArray(
+						[
+							A2($arowM$elm_neat_layout$Neat$Layout$Row$style, '-ms-flex-align', 'start'),
+							A2($arowM$elm_neat_layout$Neat$Layout$Row$style, 'align-items', 'flex-start')
+						]);
+				case 'Bottom':
+					return _List_fromArray(
+						[
+							A2($arowM$elm_neat_layout$Neat$Layout$Row$style, '-ms-flex-align', 'end'),
+							A2($arowM$elm_neat_layout$Neat$Layout$Row$style, 'align-items', 'flex-end')
+						]);
+				case 'VCenter':
+					return _List_fromArray(
+						[
+							A2($arowM$elm_neat_layout$Neat$Layout$Row$style, '-ms-flex-align', 'center'),
+							A2($arowM$elm_neat_layout$Neat$Layout$Row$style, 'align-items', 'center')
+						]);
+				default:
+					return _List_fromArray(
+						[
+							A2($arowM$elm_neat_layout$Neat$Layout$Row$style, '-ms-flex-align', 'stretch'),
+							A2($arowM$elm_neat_layout$Neat$Layout$Row$style, 'align-items', 'stretch')
+						]);
+			}
+		}());
+};
+var $arowM$elm_neat_layout$Neat$Layout$Row$rowMixins = function (align) {
+	return _List_fromArray(
+		[
+			$arowM$elm_neat_layout$Neat$Layout$Row$flex,
+			$arowM$elm_neat_layout$Neat$Layout$Row$flexDirection,
+			$arowM$elm_neat_layout$Neat$Layout$Row$horizontal(align.horizontal),
+			$arowM$elm_neat_layout$Neat$Layout$Row$vertical(align.vertical),
+			$arowM$elm_neat_layout$Neat$Layout$Row$flexWrap(align.wrap)
+		]);
+};
+var $arowM$elm_neat_layout$Neat$Layout$Row$wrapper = function (align) {
+	var _v0 = align.nodeName;
+	if (_v0 === 'div') {
+		return $arowM$elm_neat_layout$Neat$div;
+	} else {
+		var a = _v0;
+		return $arowM$elm_neat_layout$Neat$lift(
+			$elm$html$Html$node(a));
+	}
+};
+var $arowM$elm_neat_layout$Neat$Layout$Row$rowWith = F2(
+	function (align, children) {
+		return A3(
+			$arowM$elm_neat_layout$Neat$Layout$Row$wrapper,
+			align,
+			$arowM$elm_neat_layout$Neat$Layout$Row$rowMixins(align),
+			A2(
+				$elm$core$List$map,
+				$arowM$elm_neat_layout$Neat$Layout$Row$expandV(align.vertical),
+				children));
+	});
+var $arowM$elm_neat_layout$Neat$Layout$Row$row = $arowM$elm_neat_layout$Neat$Layout$Row$rowWith($arowM$elm_neat_layout$Neat$Layout$Row$defaultRow);
+var $arowM$elm_neat_layout$Neat$Layout$row = $arowM$elm_neat_layout$Neat$Layout$Row$row;
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $elm$core$Debug$toString = _Debug_toString;
-var $elm$html$Html$tr = _VirtualDom_node('tr');
-var $author$project$Main$view = function (model) {
-	return A2(
+var $arowM$elm_neat_layout$Neat$text = function (str) {
+	return A3(
+		$arowM$elm_neat_layout$Neat$lift,
 		$elm$html$Html$div,
 		_List_Nil,
 		_List_fromArray(
 			[
-				A2(
-				$elm$html$Html$button,
+				$arowM$elm_neat_layout$Neat$fromHtml(
+				F3(
+					function (_v0, _v1, _v2) {
+						return $elm$html$Html$text(str);
+					}))
+			]));
+};
+var $arowM$elm_neat_layout$Neat$resetCss = A3(
+	$elm$html$Html$node,
+	'style',
+	_List_Nil,
+	_List_fromArray(
+		[
+			$elm$html$Html$text('\n            *,\n            *::before,\n            *::after {\n              margin: 0;\n              padding: 0;\n              box-sizing: border-box;\n            }\n            [data-elm-neat-layout~=flex]{\n                display:-ms-flexbox;\n                display:flex\n            }\n            ')
+		]));
+var $arowM$elm_neat_layout$Neat$toPage = function (v) {
+	return _List_fromArray(
+		[
+			$arowM$elm_neat_layout$Neat$resetCss,
+			A4($arowM$elm_neat_layout$Neat$toHtml, 0, $arowM$elm_neat_layout$Neat$Layout$Internal$none, $arowM$elm_mixin$Mixin$none, v)
+		]);
+};
+var $elm$core$Debug$toString = _Debug_toString;
+var $author$project$Main$view = function (model) {
+	return A2(
+		$elm$html$Html$div,
+		_List_Nil,
+		$arowM$elm_neat_layout$Neat$toPage(
+			$arowM$elm_neat_layout$Neat$Layout$column(
 				_List_fromArray(
 					[
-						$elm$html$Html$Events$onClick(
-						$author$project$Main$Rollstart(
-							$elm$json$Json$Encode$int(0)))
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('まわす')
-					])),
-				A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text(
-						'rollstatus:' + $elm$core$Debug$toString(model))
-					])),
-				A2(
-				$elm$html$Html$table,
-				_List_fromArray(
-					[
-						A2($elm$html$Html$Attributes$style, 'border-collapse', 'collapse')
-					]),
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$tr,
-						_List_Nil,
+						A3(
+						$arowM$elm_neat_layout$Neat$lift,
+						$elm$html$Html$button,
+						_List_fromArray(
+							[
+								$arowM$elm_mixin$Mixin$fromAttribute(
+								$elm$html$Html$Events$onClick(
+									$author$project$Main$Rollstart(
+										$elm$json$Json$Encode$int(0))))
+							]),
+						_List_Nil),
+						$arowM$elm_neat_layout$Neat$Layout$row(
+						_List_fromArray(
+							[
+								$arowM$elm_neat_layout$Neat$text(
+								$elm$core$String$fromInt(model.tempSelection))
+							])),
+						$arowM$elm_neat_layout$Neat$Layout$row(
 						A2(
 							$elm$core$List$map,
-							function (html) {
-								return A2(
-									$elm$html$Html$td,
-									_List_fromArray(
-										[
-											A2($elm$html$Html$Attributes$style, 'border', '1px solid')
-										]),
-									_List_fromArray(
-										[html]));
-							},
+							$arowM$elm_neat_layout$Neat$text,
 							A2(
 								$elm$core$List$map,
-								$elm$html$Html$text,
-								A2($elm$core$List$map, $elm$core$String$fromInt, model.fullGroup))))
-					]))
-			]));
+								$elm$core$String$fromInt,
+								$elm$core$Array$toList(model.unselectedGroup)))),
+						$arowM$elm_neat_layout$Neat$Layout$row(
+						_List_fromArray(
+							[
+								$arowM$elm_neat_layout$Neat$text(
+								$elm$core$Debug$toString(model))
+							]))
+					]))));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
 	{init: $author$project$Main$init, subscriptions: $author$project$Main$subscriptions, update: $author$project$Main$update, view: $author$project$Main$view});
