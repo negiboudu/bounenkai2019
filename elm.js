@@ -5182,18 +5182,25 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$Main$Model = F6(
-	function (rollstatus, tempSelection, waitTime, fullGroup, unselectedGroup, selectedGroup) {
-		return {fullGroup: fullGroup, rollstatus: rollstatus, selectedGroup: selectedGroup, tempSelection: tempSelection, unselectedGroup: unselectedGroup, waitTime: waitTime};
-	});
 var $author$project$Main$Stop = {$: 'Stop'};
-var $author$project$Main$createGroup = $elm$core$Array$toList(
-	A2($elm$core$Array$initialize, 100, $elm$core$Basics$identity));
+var $author$project$Main$createGroup = A2($elm$core$Array$initialize, 10, $elm$core$Basics$identity);
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
-		A6($author$project$Main$Model, $author$project$Main$Stop, 0, 100, $author$project$Main$createGroup, $author$project$Main$createGroup, $author$project$Main$createGroup),
+		{
+			animationCount: 0,
+			animationInterval: 0,
+			animationIntervalLimit: 20,
+			fullGroup: $elm$core$Array$toList($author$project$Main$createGroup),
+			rollstatus: $author$project$Main$Stop,
+			selectedGroup: $elm$core$Array$empty,
+			tempSelection: -1,
+			unselectedGroup: $author$project$Main$createGroup
+		},
 		$elm$core$Platform$Cmd$none);
 };
 var $author$project$Main$ComeonAnimationFrame = function (a) {
@@ -5502,9 +5509,56 @@ var $elm$random$Random$generate = F2(
 				A2($elm$random$Random$map, tagger, generator)));
 	});
 var $elm$core$Bitwise$and = _Bitwise_and;
-var $elm$core$Basics$negate = function (n) {
-	return -n;
+var $elm$core$Array$bitMask = 4294967295 >>> (32 - $elm$core$Array$shiftStep);
+var $elm$core$Basics$ge = _Utils_ge;
+var $elm$core$Elm$JsArray$unsafeGet = _JsArray_unsafeGet;
+var $elm$core$Array$getHelp = F3(
+	function (shift, index, tree) {
+		getHelp:
+		while (true) {
+			var pos = $elm$core$Array$bitMask & (index >>> shift);
+			var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, pos, tree);
+			if (_v0.$ === 'SubTree') {
+				var subTree = _v0.a;
+				var $temp$shift = shift - $elm$core$Array$shiftStep,
+					$temp$index = index,
+					$temp$tree = subTree;
+				shift = $temp$shift;
+				index = $temp$index;
+				tree = $temp$tree;
+				continue getHelp;
+			} else {
+				var values = _v0.a;
+				return A2($elm$core$Elm$JsArray$unsafeGet, $elm$core$Array$bitMask & index, values);
+			}
+		}
+	});
+var $elm$core$Bitwise$shiftLeftBy = _Bitwise_shiftLeftBy;
+var $elm$core$Array$tailIndex = function (len) {
+	return (len >>> 5) << 5;
 };
+var $elm$core$Array$get = F2(
+	function (index, _v0) {
+		var len = _v0.a;
+		var startShift = _v0.b;
+		var tree = _v0.c;
+		var tail = _v0.d;
+		return ((index < 0) || (_Utils_cmp(index, len) > -1)) ? $elm$core$Maybe$Nothing : ((_Utils_cmp(
+			index,
+			$elm$core$Array$tailIndex(len)) > -1) ? $elm$core$Maybe$Just(
+			A2($elm$core$Elm$JsArray$unsafeGet, $elm$core$Array$bitMask & index, tail)) : $elm$core$Maybe$Just(
+			A3($elm$core$Array$getHelp, startShift, index, tree)));
+	});
+var $author$project$Main$getSelection = F2(
+	function (arr, index) {
+		var _v0 = A2($elm$core$Array$get, index, arr);
+		if (_v0.$ === 'Just') {
+			var selection = _v0.a;
+			return selection;
+		} else {
+			return -1;
+		}
+	});
 var $elm$core$Bitwise$xor = _Bitwise_xor;
 var $elm$random$Random$peel = function (_v0) {
 	var state = _v0.a;
@@ -5543,7 +5597,90 @@ var $elm$random$Random$int = F2(
 				}
 			});
 	});
+var $elm$core$Array$length = function (_v0) {
+	var len = _v0.a;
+	return len;
+};
 var $elm$core$Basics$neq = _Utils_notEqual;
+var $elm$core$Elm$JsArray$push = _JsArray_push;
+var $elm$core$Elm$JsArray$singleton = _JsArray_singleton;
+var $elm$core$Elm$JsArray$unsafeSet = _JsArray_unsafeSet;
+var $elm$core$Array$insertTailInTree = F4(
+	function (shift, index, tail, tree) {
+		var pos = $elm$core$Array$bitMask & (index >>> shift);
+		if (_Utils_cmp(
+			pos,
+			$elm$core$Elm$JsArray$length(tree)) > -1) {
+			if (shift === 5) {
+				return A2(
+					$elm$core$Elm$JsArray$push,
+					$elm$core$Array$Leaf(tail),
+					tree);
+			} else {
+				var newSub = $elm$core$Array$SubTree(
+					A4($elm$core$Array$insertTailInTree, shift - $elm$core$Array$shiftStep, index, tail, $elm$core$Elm$JsArray$empty));
+				return A2($elm$core$Elm$JsArray$push, newSub, tree);
+			}
+		} else {
+			var value = A2($elm$core$Elm$JsArray$unsafeGet, pos, tree);
+			if (value.$ === 'SubTree') {
+				var subTree = value.a;
+				var newSub = $elm$core$Array$SubTree(
+					A4($elm$core$Array$insertTailInTree, shift - $elm$core$Array$shiftStep, index, tail, subTree));
+				return A3($elm$core$Elm$JsArray$unsafeSet, pos, newSub, tree);
+			} else {
+				var newSub = $elm$core$Array$SubTree(
+					A4(
+						$elm$core$Array$insertTailInTree,
+						shift - $elm$core$Array$shiftStep,
+						index,
+						tail,
+						$elm$core$Elm$JsArray$singleton(value)));
+				return A3($elm$core$Elm$JsArray$unsafeSet, pos, newSub, tree);
+			}
+		}
+	});
+var $elm$core$Array$unsafeReplaceTail = F2(
+	function (newTail, _v0) {
+		var len = _v0.a;
+		var startShift = _v0.b;
+		var tree = _v0.c;
+		var tail = _v0.d;
+		var originalTailLen = $elm$core$Elm$JsArray$length(tail);
+		var newTailLen = $elm$core$Elm$JsArray$length(newTail);
+		var newArrayLen = len + (newTailLen - originalTailLen);
+		if (_Utils_eq(newTailLen, $elm$core$Array$branchFactor)) {
+			var overflow = _Utils_cmp(newArrayLen >>> $elm$core$Array$shiftStep, 1 << startShift) > 0;
+			if (overflow) {
+				var newShift = startShift + $elm$core$Array$shiftStep;
+				var newTree = A4(
+					$elm$core$Array$insertTailInTree,
+					newShift,
+					len,
+					newTail,
+					$elm$core$Elm$JsArray$singleton(
+						$elm$core$Array$SubTree(tree)));
+				return A4($elm$core$Array$Array_elm_builtin, newArrayLen, newShift, newTree, $elm$core$Elm$JsArray$empty);
+			} else {
+				return A4(
+					$elm$core$Array$Array_elm_builtin,
+					newArrayLen,
+					startShift,
+					A4($elm$core$Array$insertTailInTree, startShift, len, newTail, tree),
+					$elm$core$Elm$JsArray$empty);
+			}
+		} else {
+			return A4($elm$core$Array$Array_elm_builtin, newArrayLen, startShift, tree, newTail);
+		}
+	});
+var $elm$core$Array$push = F2(
+	function (a, array) {
+		var tail = array.d;
+		return A2(
+			$elm$core$Array$unsafeReplaceTail,
+			A2($elm$core$Elm$JsArray$push, a, tail),
+			array);
+	});
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -5551,47 +5688,49 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{rollstatus: $author$project$Main$Rolling, waitTime: model.waitTime + 100}),
-					$elm$core$Platform$Cmd$none);
-			case 'Rollend':
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							rollstatus: $author$project$Main$Stop,
-							selectedGroup: _Utils_ap(
-								model.selectedGroup,
-								_List_fromArray(
-									[model.tempSelection])),
-							unselectedGroup: $elm$core$Array$toList(
-								A2(
-									$elm$core$Array$filter,
-									function (val) {
-										return !_Utils_eq(val, model.tempSelection);
-									},
-									$elm$core$Array$fromList(model.unselectedGroup)))
-						}),
+						{rollstatus: $author$project$Main$Rolling}),
 					$elm$core$Platform$Cmd$none);
 			case 'RandomGenerate':
 				var num = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{tempSelection: num}),
+						{
+							animationCount: 0,
+							animationInterval: model.animationInterval + 1,
+							tempSelection: A2($author$project$Main$getSelection, model.unselectedGroup, num)
+						}),
 					$elm$core$Platform$Cmd$none);
 			default:
-				return _Utils_Tuple2(
-					model,
-					_Utils_eq(model.rollstatus, $author$project$Main$Rolling) ? A2(
+				return _Utils_eq(model.rollstatus, $author$project$Main$Rolling) ? _Utils_Tuple2(
+					(_Utils_cmp(model.animationInterval, model.animationIntervalLimit) > 0) ? _Utils_update(
+						model,
+						{
+							animationCount: 0,
+							animationInterval: 0,
+							rollstatus: $author$project$Main$Stop,
+							selectedGroup: A2($elm$core$Array$push, model.tempSelection, model.selectedGroup),
+							unselectedGroup: A2(
+								$elm$core$Array$filter,
+								function (val) {
+									return !_Utils_eq(val, model.tempSelection);
+								},
+								model.unselectedGroup)
+						}) : _Utils_update(
+						model,
+						{animationCount: model.animationCount + 1}),
+					(_Utils_cmp(model.animationInterval, model.animationCount) < 0) ? A2(
 						$elm$random$Random$generate,
 						$author$project$Main$RandomGenerate,
 						A2(
 							$elm$random$Random$int,
 							0,
-							$elm$core$List$length(model.unselectedGroup))) : $elm$core$Platform$Cmd$none);
+							function (n) {
+								return n - 1;
+							}(
+								$elm$core$Array$length(model.unselectedGroup)))) : $elm$core$Platform$Cmd$none) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 		}
 	});
-var $author$project$Main$Rollend = {$: 'Rollend'};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$json$Json$Encode$int = _Json_wrap;
@@ -5637,16 +5776,6 @@ var $author$project$Main$view = function (model) {
 				_List_fromArray(
 					[
 						$elm$html$Html$text('まわす')
-					])),
-				A2(
-				$elm$html$Html$button,
-				_List_fromArray(
-					[
-						$elm$html$Html$Events$onClick($author$project$Main$Rollend)
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('とめる')
 					])),
 				A2(
 				$elm$html$Html$div,
