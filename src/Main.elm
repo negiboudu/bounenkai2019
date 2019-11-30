@@ -1,6 +1,6 @@
 port module Main exposing (..)
 
-import Array
+import Array exposing (..)
 import Browser
 import Browser.Events
 import Html exposing (..)
@@ -31,19 +31,22 @@ type alias Model =
     , tempSelection : Int
     , waitTime : Int
     , fullGroup : List Int
-    , unselectedGroup : List Int
-    , selectedGroup : List Int
+    , unselectedGroup : Array Int
+    , selectedGroup : Array Int
+    , animationCount : Int
+    , animationInterval : Int
+    , animationIntervalLimit : Int
     }
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( Model Stop 0 100 createGroup createGroup createGroup, Cmd.none )
+    ( Model Stop 0 100 (Array.toList createGroup) createGroup createGroup 0 0 0, Cmd.none )
 
 
-createGroup : List Int
+createGroup : Array Int
 createGroup =
-    Array.initialize 100 identity |> Array.toList
+    Array.initialize 100 identity
 
 
 type Msg
@@ -56,6 +59,16 @@ type Msg
 port rollend : Int -> Cmd msg
 
 
+getSelection : Model -> Int
+getSelection model =
+    case Array.get model.tempSelection model.unselectedGroup of
+        Just selection ->
+            selection
+
+        Nothing ->
+            -1
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -63,7 +76,13 @@ update msg model =
             ( { model | rollstatus = Rolling, waitTime = model.waitTime + 100 }, Cmd.none )
 
         Rollend ->
-            ( { model | rollstatus = Stop, selectedGroup = model.selectedGroup ++ [ model.tempSelection ], unselectedGroup = Array.fromList model.unselectedGroup |> Array.filter (\val -> val /= model.tempSelection) |> Array.toList }, Cmd.none )
+            ( { model
+                | rollstatus = Stop
+                , selectedGroup = Array.push (getSelection model) model.selectedGroup
+                , unselectedGroup = Array.filter (\val -> val /= model.tempSelection) model.unselectedGroup
+              }
+            , Cmd.none
+            )
 
         RandomGenerate num ->
             ( { model | tempSelection = num }
@@ -71,13 +90,19 @@ update msg model =
             )
 
         ComeonAnimationFrame _ ->
-            ( model
-            , if model.rollstatus == Rolling then
-                Random.generate RandomGenerate <| Random.int 0 <| List.length model.unselectedGroup
+            if model.rollstatus == Rolling then
+                ( { model
+                    | animationCount = model.animationCount + 1
+                  }
+                , if model.animationInterval < model.animationCount then
+                    Random.generate RandomGenerate <| Random.int 0 <| Array.length model.unselectedGroup
 
-              else
-                Cmd.none
-            )
+                  else
+                    Cmd.none
+                )
+
+            else
+                ( model, Cmd.none )
 
 
 port rollstart : (Json.Encode.Value -> msg) -> Sub msg
@@ -94,9 +119,6 @@ view model =
         [ button
             [ onClick (Rollstart <| Json.Encode.int 0) ]
             [ text "まわす" ]
-        , button
-            [ onClick Rollend ]
-            [ text "とめる" ]
         , div []
             [ text <| "rollstatus:" ++ Debug.toString model ]
         , table [ style "border-collapse" "collapse" ]
