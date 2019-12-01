@@ -5183,7 +5183,7 @@ var $elm$core$Task$perform = F2(
 	});
 var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Main$Stop = {$: 'Stop'};
-var $author$project$Main$createGroup = A2($elm$core$Array$initialize, 10, $elm$core$Basics$identity);
+var $author$project$Main$createGroup = A2($elm$core$Array$initialize, 25, $elm$core$Basics$identity);
 var $elm$core$Basics$negate = function (n) {
 	return -n;
 };
@@ -5731,15 +5731,36 @@ var $author$project$Main$update = F2(
 								$elm$core$Array$length(model.unselectedGroup)))) : $elm$core$Platform$Cmd$none) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 		}
 	});
+var $arowM$elm_neat_layout$Neat$IsPadding = function (a) {
+	return {$: 'IsPadding', a: a};
+};
 var $elm$html$Html$button = _VirtualDom_node('button');
-var $elm$virtual_dom$VirtualDom$attribute = F2(
-	function (key, value) {
+var $elm$json$Json$Encode$string = _Json_wrap;
+var $elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
 		return A2(
-			_VirtualDom_attribute,
-			_VirtualDom_noOnOrFormAction(key),
-			_VirtualDom_noJavaScriptOrHtmlUri(value));
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$string(string));
 	});
-var $elm$html$Html$Attributes$attribute = $elm$virtual_dom$VirtualDom$attribute;
+var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
+var $elm$core$Basics$composeR = F3(
+	function (f, g, x) {
+		return g(
+			f(x));
+	});
+var $arowM$elm_classname$Html$Attributes$Classname$classWith = function (f) {
+	return A2(
+		$elm$core$Basics$composeR,
+		$elm$core$String$split(' '),
+		A2(
+			$elm$core$Basics$composeR,
+			$elm$core$List$map(f),
+			A2(
+				$elm$core$Basics$composeR,
+				$elm$core$String$join(' '),
+				$elm$html$Html$Attributes$class)));
+};
 var $arowM$elm_mixin$Mixin$Mixin = function (a) {
 	return {$: 'Mixin', a: a};
 };
@@ -5748,6 +5769,24 @@ var $arowM$elm_mixin$Mixin$fromAttribute = function (attr) {
 		_List_fromArray(
 			[attr]));
 };
+var $arowM$elm_classname$Html$Attributes$Classname$classMixinWith = function (f) {
+	return A2(
+		$elm$core$Basics$composeL,
+		$arowM$elm_mixin$Mixin$fromAttribute,
+		$arowM$elm_classname$Html$Attributes$Classname$classWith(f));
+};
+var $author$project$Main$class = $arowM$elm_classname$Html$Attributes$Classname$classMixinWith(
+	function (name) {
+		return 'app__' + name;
+	});
+var $elm$virtual_dom$VirtualDom$attribute = F2(
+	function (key, value) {
+		return A2(
+			_VirtualDom_attribute,
+			_VirtualDom_noOnOrFormAction(key),
+			_VirtualDom_noJavaScriptOrHtmlUri(value));
+	});
+var $elm$html$Html$Attributes$attribute = $elm$virtual_dom$VirtualDom$attribute;
 var $arowM$elm_neat_layout$Neat$Layout$Column$flex = $arowM$elm_mixin$Mixin$fromAttribute(
 	A2($elm$html$Html$Attributes$attribute, 'data-elm-neat-layout', 'flex'));
 var $elm$core$List$append = F2(
@@ -6037,11 +6076,38 @@ var $arowM$elm_neat_layout$Neat$Layout$Column$columnWith = F2(
 				$arowM$elm_neat_layout$Neat$Layout$Column$expandH(align.horizontal),
 				children));
 	});
+var $arowM$elm_neat_layout$Neat$Layout$columnWith = $arowM$elm_neat_layout$Neat$Layout$Column$columnWith;
 var $arowM$elm_neat_layout$Neat$Layout$Column$Left = {$: 'Left'};
 var $arowM$elm_neat_layout$Neat$Layout$Column$Top = {$: 'Top'};
 var $arowM$elm_neat_layout$Neat$Layout$Column$defaultColumn = {horizontal: $arowM$elm_neat_layout$Neat$Layout$Column$Left, nodeName: 'div', vertical: $arowM$elm_neat_layout$Neat$Layout$Column$Top, wrap: false};
-var $arowM$elm_neat_layout$Neat$Layout$Column$column = $arowM$elm_neat_layout$Neat$Layout$Column$columnWith($arowM$elm_neat_layout$Neat$Layout$Column$defaultColumn);
-var $arowM$elm_neat_layout$Neat$Layout$column = $arowM$elm_neat_layout$Neat$Layout$Column$column;
+var $arowM$elm_neat_layout$Neat$Layout$Row$Left = {$: 'Left'};
+var $arowM$elm_neat_layout$Neat$Layout$Row$Top = {$: 'Top'};
+var $arowM$elm_neat_layout$Neat$Layout$Row$defaultRow = {horizontal: $arowM$elm_neat_layout$Neat$Layout$Row$Left, nodeName: 'div', vertical: $arowM$elm_neat_layout$Neat$Layout$Row$Top, wrap: false};
+var $arowM$elm_neat_layout$Neat$modifyPadding = F2(
+	function (g, _v0) {
+		var f = _v0.a;
+		return $arowM$elm_neat_layout$Neat$View(
+			function (p) {
+				return f(
+					g(p));
+			});
+	});
+var $arowM$elm_neat_layout$Neat$newPadding = F3(
+	function (_v0, _v1, curr) {
+		var c1 = _v0.a;
+		var c2 = _v1.a;
+		return ((c2.rem - c1.rem) / 2) + curr;
+	});
+var $arowM$elm_neat_layout$Neat$expand = F3(
+	function (p1, p2, child) {
+		return A2(
+			$arowM$elm_neat_layout$Neat$modifyPadding,
+			A2($arowM$elm_neat_layout$Neat$newPadding, p1, p2),
+			child);
+	});
+var $arowM$elm_neat_layout$Neat$noPadding = $arowM$elm_neat_layout$Neat$IsPadding(
+	{rem: 0});
+var $arowM$elm_neat_layout$Neat$fromNoPadding = $arowM$elm_neat_layout$Neat$expand($arowM$elm_neat_layout$Neat$noPadding);
 var $elm$json$Json$Encode$int = _Json_wrap;
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
@@ -6060,9 +6126,6 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
-var $arowM$elm_neat_layout$Neat$Layout$Row$Left = {$: 'Left'};
-var $arowM$elm_neat_layout$Neat$Layout$Row$Top = {$: 'Top'};
-var $arowM$elm_neat_layout$Neat$Layout$Row$defaultRow = {horizontal: $arowM$elm_neat_layout$Neat$Layout$Row$Left, nodeName: 'div', vertical: $arowM$elm_neat_layout$Neat$Layout$Row$Top, wrap: false};
 var $arowM$elm_neat_layout$Neat$Layout$Row$style = F2(
 	function (k, v) {
 		return $arowM$elm_mixin$Mixin$fromAttribute(
@@ -6200,8 +6263,7 @@ var $arowM$elm_neat_layout$Neat$Layout$Row$rowWith = F2(
 				$arowM$elm_neat_layout$Neat$Layout$Row$expandV(align.vertical),
 				children));
 	});
-var $arowM$elm_neat_layout$Neat$Layout$Row$row = $arowM$elm_neat_layout$Neat$Layout$Row$rowWith($arowM$elm_neat_layout$Neat$Layout$Row$defaultRow);
-var $arowM$elm_neat_layout$Neat$Layout$row = $arowM$elm_neat_layout$Neat$Layout$Row$row;
+var $arowM$elm_neat_layout$Neat$Layout$rowWith = $arowM$elm_neat_layout$Neat$Layout$Row$rowWith;
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $arowM$elm_neat_layout$Neat$text = function (str) {
@@ -6239,9 +6301,52 @@ var $author$project$Main$view = function (model) {
 		$elm$html$Html$div,
 		_List_Nil,
 		$arowM$elm_neat_layout$Neat$toPage(
-			$arowM$elm_neat_layout$Neat$Layout$column(
+			A2(
+				$arowM$elm_neat_layout$Neat$Layout$columnWith,
+				$arowM$elm_neat_layout$Neat$Layout$Column$defaultColumn,
 				_List_fromArray(
 					[
+						A2(
+						$arowM$elm_neat_layout$Neat$Layout$rowWith,
+						$arowM$elm_neat_layout$Neat$Layout$Row$defaultRow,
+						A2(
+							$elm$core$List$map,
+							$arowM$elm_neat_layout$Neat$fromNoPadding(
+								$arowM$elm_neat_layout$Neat$IsPadding(
+									{rem: 2})),
+							A2(
+								$elm$core$List$map,
+								$arowM$elm_neat_layout$Neat$div(
+									_List_fromArray(
+										[
+											$author$project$Main$class('unselected')
+										])),
+								A2(
+									$elm$core$List$map,
+									function (t) {
+										return _List_fromArray(
+											[t]);
+									},
+									A2(
+										$elm$core$List$map,
+										$arowM$elm_neat_layout$Neat$text,
+										A2($elm$core$List$map, $elm$core$String$fromInt, model.fullGroup)))))),
+						A2(
+						$arowM$elm_neat_layout$Neat$Layout$rowWith,
+						$arowM$elm_neat_layout$Neat$Layout$Row$defaultRow,
+						_List_fromArray(
+							[
+								$arowM$elm_neat_layout$Neat$text(
+								$elm$core$String$fromInt(model.tempSelection))
+							])),
+						A2(
+						$arowM$elm_neat_layout$Neat$Layout$rowWith,
+						$arowM$elm_neat_layout$Neat$Layout$Row$defaultRow,
+						_List_fromArray(
+							[
+								$arowM$elm_neat_layout$Neat$text(
+								$elm$core$Debug$toString(model))
+							])),
 						A3(
 						$arowM$elm_neat_layout$Neat$lift,
 						$elm$html$Html$button,
@@ -6252,27 +6357,7 @@ var $author$project$Main$view = function (model) {
 									$author$project$Main$Rollstart(
 										$elm$json$Json$Encode$int(0))))
 							]),
-						_List_Nil),
-						$arowM$elm_neat_layout$Neat$Layout$row(
-						_List_fromArray(
-							[
-								$arowM$elm_neat_layout$Neat$text(
-								$elm$core$String$fromInt(model.tempSelection))
-							])),
-						$arowM$elm_neat_layout$Neat$Layout$row(
-						A2(
-							$elm$core$List$map,
-							$arowM$elm_neat_layout$Neat$text,
-							A2(
-								$elm$core$List$map,
-								$elm$core$String$fromInt,
-								$elm$core$Array$toList(model.unselectedGroup)))),
-						$arowM$elm_neat_layout$Neat$Layout$row(
-						_List_fromArray(
-							[
-								$arowM$elm_neat_layout$Neat$text(
-								$elm$core$Debug$toString(model))
-							]))
+						_List_Nil)
 					]))));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(

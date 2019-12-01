@@ -5,11 +5,14 @@ import Browser
 import Browser.Events
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Attributes.Classname exposing (classMixinWith)
 import Html.Events exposing (..)
 import Json.Encode
 import Mixin exposing (Mixin)
 import Neat
 import Neat.Layout as Layout
+import Neat.Layout.Column as Column exposing (..)
+import Neat.Layout.Row as Row exposing (..)
 import Random
 import Time
 
@@ -29,10 +32,15 @@ type Rollstatus
     | Rolling
 
 
+type SelectStatus
+    = Selected
+    | Unselected
+
+
 type alias Model =
     { rollstatus : Rollstatus
     , tempSelection : Int
-    , fullGroup : List Int
+    , fullGroup : SelectStatus (List Int)
     , unselectedGroup : Array Int
     , selectedGroup : Array Int
     , animationCount : Int
@@ -58,7 +66,7 @@ init _ =
 
 createGroup : Array Int
 createGroup =
-    Array.initialize 10 identity
+    Array.initialize 25 identity
 
 
 type Msg
@@ -134,41 +142,43 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-    Layout.column
-        [ Neat.lift Html.button
+    Layout.columnWith
+        Column.defaultColumn
+        [ Layout.rowWith
+            Row.defaultRow
+            (model.fullGroup
+                |> List.map String.fromInt
+                |> List.map Neat.text
+                |> List.map (\t -> [ t ])
+                |> List.map (Neat.div [ class (getClassName model) ])
+                |> List.map (Neat.fromNoPadding (Neat.IsPadding { rem = 2 }))
+            )
+        , Layout.rowWith
+            Row.defaultRow
+            [ Neat.text (String.fromInt model.tempSelection)
+            ]
+        , Layout.rowWith
+            Row.defaultRow
+            [ Neat.text <| Debug.toString model ]
+        , Neat.lift Html.button
             [ onClick (Rollstart <| Json.Encode.int 0)
                 |> Mixin.fromAttribute
             ]
             []
-        , Layout.row
-            [ Neat.text (String.fromInt model.tempSelection)
-            ]
-        , Layout.row
-            (Array.toList
-                model.unselectedGroup
-                |> List.map String.fromInt
-                |> List.map Neat.text
-            )
-        , Layout.row [ Neat.text <| Debug.toString model ]
         ]
         |> Neat.toPage
         |> div []
 
 
+getClassName : Model -> String
+getClassName model =
+    model.tempSelection
 
-{-
-   [ button
-       [ onClick (Rollstart <| Json.Encode.int 0) ]
-       [ text "まわす" ]
-   , div []
-       [ text <| "rollstatus:" ++ Debug.toString model ]
-   , table [ style "border-collapse" "collapse" ]
-       [ tr []
-           (model.fullGroup
-               |> List.map String.fromInt
-               |> List.map text
-               |> List.map (\html -> td [ style "border" "1px solid" ] [ html ])
-           )
-       ]
-   ]
--}
+
+
+-- Helper functions
+
+
+class : String -> Mixin msg
+class =
+    classMixinWith <| \name -> "app__" ++ name
