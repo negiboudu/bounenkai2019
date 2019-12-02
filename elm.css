@@ -1,3 +1,24 @@
+.app__monitor {
+  font-family: メイリオ;
+  font-size: 24rem;
+}
+
 .app__unselected {
-  background: #AAEEEE;
+  background: #555555;
+}
+
+.app__selected {
+  background: #FFFF00;
+}
+
+.app__tempSelection {
+  background: #FF0000;
+}
+
+.app__listitem {
+  font-family: メイリオ;
+  font-size: 2rem;
+  width: 4rem;
+  text-align: center;
+  border: solid thin #FFFFFF;
 }

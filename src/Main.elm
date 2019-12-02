@@ -1,6 +1,6 @@
 port module Main exposing (..)
 
-import Array exposing (..)
+import Array exposing (Array)
 import Browser
 import Browser.Events
 import Html exposing (..)
@@ -9,7 +9,7 @@ import Html.Attributes.Classname exposing (classMixinWith)
 import Html.Events exposing (..)
 import Json.Encode
 import Mixin exposing (Mixin)
-import Neat
+import Neat exposing (..)
 import Neat.Layout as Layout
 import Neat.Layout.Column as Column exposing (..)
 import Neat.Layout.Row as Row exposing (..)
@@ -32,15 +32,10 @@ type Rollstatus
     | Rolling
 
 
-type SelectStatus
-    = Selected
-    | Unselected
-
-
 type alias Model =
     { rollstatus : Rollstatus
     , tempSelection : Int
-    , fullGroup : SelectStatus (List Int)
+    , fullGroup : List Int
     , unselectedGroup : Array Int
     , selectedGroup : Array Int
     , animationCount : Int
@@ -66,7 +61,7 @@ init _ =
 
 createGroup : Array Int
 createGroup =
-    Array.initialize 25 identity
+    Array.initialize 100 identity
 
 
 type Msg
@@ -143,36 +138,66 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
     Layout.columnWith
-        Column.defaultColumn
-        [ Layout.rowWith
-            Row.defaultRow
+        { defaultColumn
+            | horizontal = Column.HCenter
+        }
+        [ Neat.div
+            [ class "monitor" ]
+            [ Neat.text <| String.fromInt model.tempSelection ]
+            |> fromNoPadding monitorPadding
+        , Layout.rowWith
+            { defaultRow
+                | vertical = Row.VCenter
+                , horizontal = Row.HCenter
+                , wrap = True
+            }
             (model.fullGroup
-                |> List.map String.fromInt
-                |> List.map Neat.text
-                |> List.map (\t -> [ t ])
-                |> List.map (Neat.div [ class (getClassName model) ])
-                |> List.map (Neat.fromNoPadding (Neat.IsPadding { rem = 2 }))
+                |> List.map (creatediv model)
             )
-        , Layout.rowWith
-            Row.defaultRow
-            [ Neat.text (String.fromInt model.tempSelection)
-            ]
-        , Layout.rowWith
-            Row.defaultRow
-            [ Neat.text <| Debug.toString model ]
-        , Neat.lift Html.button
-            [ onClick (Rollstart <| Json.Encode.int 0)
-                |> Mixin.fromAttribute
-            ]
-            []
+        , lift button [] [ Neat.text "まわす" ]
+            |> setMixin (Mixin.fromAttribute (onClick <| Rollstart (Json.Encode.int 0)))
         ]
-        |> Neat.toPage
-        |> div []
+        |> toPage
+        |> Html.div []
 
 
-getClassName : Model -> String
-getClassName model =
-    model.tempSelection
+creatediv : Model -> Int -> View p Msg
+creatediv model num =
+    Neat.div (getClassName model num) (getText model num)
+
+
+getClassName : Model -> Int -> List (Mixin Msg)
+getClassName model num =
+    if Array.toList model.selectedGroup |> List.member num then
+        [ class "selected", class "listitem" ]
+
+    else if model.tempSelection == num then
+        [ class "tempSelection", class "listitem" ]
+
+    else
+        [ class "unselected", class "listitem" ]
+
+
+getText : Model -> Int -> List (View p Msg)
+getText model num =
+    String.fromInt num
+        |> Neat.text
+        |> fromNoPadding lampPadding
+        |> (\v -> [ v ])
+
+
+
+-- paddings
+
+
+monitorPadding : IsPadding p
+monitorPadding =
+    IsPadding { rem = 0.1 }
+
+
+lampPadding : IsPadding p
+lampPadding =
+    IsPadding { rem = 0.5 }
 
 
 
