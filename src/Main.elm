@@ -1,4 +1,4 @@
-port module Main exposing (..)
+port module Main exposing (Model, Msg(..), Rollstatus(..), class, createGroup, creatediv, getClassName, getSelection, getText, init, lampPadding, main, monitorPadding, rollend, rollstart, subscriptions, update, view)
 
 import Array exposing (Array)
 import Browser
@@ -34,10 +34,10 @@ type Rollstatus
 
 type alias Model =
     { rollstatus : Rollstatus
-    , tempSelection : Int
-    , fullGroup : List Int
-    , unselectedGroup : Array Int
-    , selectedGroup : Array Int
+    , tempSelection : String
+    , fullGroup : List String
+    , unselectedGroup : Array String
+    , selectedGroup : Array String
     , animationCount : Int
     , animationInterval : Int
     , animationIntervalLimit : Int
@@ -47,7 +47,7 @@ type alias Model =
 init : () -> ( Model, Cmd Msg )
 init _ =
     ( { rollstatus = Stop
-      , tempSelection = -1
+      , tempSelection = "-1"
       , fullGroup = Array.toList createGroup
       , unselectedGroup = createGroup
       , selectedGroup = Array.empty
@@ -59,9 +59,11 @@ init _ =
     )
 
 
-createGroup : Array Int
+createGroup : Array String
 createGroup =
     Array.initialize 100 identity
+        |> Array.map String.fromInt
+        |> Array.push "SP"
 
 
 type Msg
@@ -73,14 +75,14 @@ type Msg
 port rollend : Int -> Cmd msg
 
 
-getSelection : Array Int -> Int -> Int
+getSelection : Array String -> Int -> String
 getSelection arr index =
     case Array.get index arr of
         Just selection ->
             selection
 
         Nothing ->
-            -1
+            "-1"
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -143,7 +145,7 @@ view model =
         }
         [ Neat.div
             [ class "monitor" ]
-            [ Neat.text <| String.fromInt model.tempSelection ]
+            [ Neat.text <| model.tempSelection ]
             |> fromNoPadding monitorPadding
         , Layout.rowWith
             { defaultRow
@@ -161,12 +163,12 @@ view model =
         |> Html.div []
 
 
-creatediv : Model -> Int -> View p Msg
+creatediv : Model -> String -> View p Msg
 creatediv model num =
-    Neat.div (getClassName model num) (getText model num)
+    Neat.div (getClassName model num) (getText num)
 
 
-getClassName : Model -> Int -> List (Mixin Msg)
+getClassName : Model -> String -> List (Mixin Msg)
 getClassName model num =
     if Array.toList model.selectedGroup |> List.member num then
         [ class "selected", class "listitem" ]
@@ -178,10 +180,9 @@ getClassName model num =
         [ class "unselected", class "listitem" ]
 
 
-getText : Model -> Int -> List (View p Msg)
-getText model num =
-    String.fromInt num
-        |> Neat.text
+getText : String -> List (View p Msg)
+getText num =
+    Neat.text num
         |> fromNoPadding lampPadding
         |> (\v -> [ v ])
 
