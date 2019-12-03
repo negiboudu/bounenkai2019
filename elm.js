@@ -5311,7 +5311,7 @@ var $author$project$Main$init = function (_v0) {
 			fullGroup: $elm$core$Array$toList($author$project$Main$createGroup),
 			rollstatus: $author$project$Main$Stop,
 			selectedGroup: $elm$core$Array$empty,
-			tempSelection: '-1',
+			tempSelection: '?',
 			unselectedGroup: $author$project$Main$createGroup
 		},
 		$elm$core$Platform$Cmd$none);
@@ -5663,7 +5663,7 @@ var $author$project$Main$getSelection = F2(
 			var selection = _v0.a;
 			return selection;
 		} else {
-			return '-1';
+			return '?';
 		}
 	});
 var $elm$core$Basics$negate = function (n) {
@@ -6414,6 +6414,7 @@ var $arowM$elm_neat_layout$Neat$toPage = function (v) {
 			A4($arowM$elm_neat_layout$Neat$toHtml, 0, $arowM$elm_neat_layout$Neat$Layout$Internal$none, $arowM$elm_mixin$Mixin$none, v)
 		]);
 };
+var $elm$core$Debug$toString = _Debug_toString;
 var $author$project$Main$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
@@ -6461,7 +6462,9 @@ var $author$project$Main$view = function (model) {
 							_List_fromArray(
 								[
 									$arowM$elm_neat_layout$Neat$text('まわす')
-								])))
+								]))),
+						$arowM$elm_neat_layout$Neat$text(
+						$elm$core$Debug$toString(model.rollstatus))
 					]))));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(

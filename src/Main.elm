@@ -47,7 +47,7 @@ type alias Model =
 init : () -> ( Model, Cmd Msg )
 init _ =
     ( { rollstatus = Stop
-      , tempSelection = "-1"
+      , tempSelection = "?"
       , fullGroup = Array.toList createGroup
       , unselectedGroup = createGroup
       , selectedGroup = Array.empty
@@ -82,7 +82,7 @@ getSelection arr index =
             selection
 
         Nothing ->
-            "-1"
+            "?"
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -158,6 +158,7 @@ view model =
             )
         , lift button [] [ Neat.text "まわす" ]
             |> setMixin (Mixin.fromAttribute (onClick <| Rollstart (Json.Encode.int 0)))
+        , Neat.text <| Debug.toString model.rollstatus
         ]
         |> toPage
         |> Html.div []
