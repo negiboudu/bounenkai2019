@@ -2,13 +2,12 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>ビンゴうつす</title>
-  <script src="elm.js"></script>
+  <title>ビンゴまわす</title>
   <link rel="stylesheet" type="text/css" href="elm.css">
 </head>
 
 <body>
-    <div id="elm"></div>
+    <button type="button" style="width:20rem; height:20rem; font-size:5rem; font-family:メイリオ" id="rollbutton">まわす</button> 
 
     <!-- firebase librarys -->
     <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
@@ -28,23 +27,18 @@
 
       var db = firebase.firestore();
 
-      // Elm
-      var app = Elm.Main.init({
-        node: document.getElementById('elm')
-      });
-
       // db listener
       db.collection("rollstatus").doc("rollstatusdoc").onSnapshot((documentSnapshot) => { 
-        if (documentSnapshot.data().status == 1){
-          // send to elm
-          app.ports.rollstart.send();
+        if (documentSnapshot.data().status == 0){
+          document.getElementById("rollbutton").disabled = false;
 	}
       });
 
-      app.ports.rollend.subscribe(() => { 
+      document.getElementById("rollbutton").onclick = function(){ 
         // update db 
-        db.collection("rollstatus").doc("rollstatusdoc").update({status:0}); 
-      });
+        db.collection("rollstatus").doc("rollstatusdoc").update({status:1}); 
+        document.getElementById("rollbutton").disabled = true;	
+      };
 
     </script>
 </body>

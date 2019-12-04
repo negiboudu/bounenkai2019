@@ -102,28 +102,30 @@ update msg model =
 
         ComeonAnimationFrame _ ->
             if model.rollstatus == Rolling then
-                ( if model.animationInterval > model.animationIntervalLimit then
-                    { model
+                if model.animationInterval > model.animationIntervalLimit then
+                    ( { model
                         | rollstatus = Stop
                         , selectedGroup = Array.push model.tempSelection model.selectedGroup
                         , unselectedGroup = Array.filter (\val -> val /= model.tempSelection) model.unselectedGroup
                         , animationCount = 0
                         , animationInterval = 0
-                    }
+                      }
+                    , rollend 0
+                    )
 
-                  else
-                    { model
+                else
+                    ( { model
                         | animationCount = model.animationCount + 1
-                    }
-                , if model.animationInterval < model.animationCount then
-                    Array.length model.unselectedGroup
-                        |> (\n -> n - 1)
-                        |> Random.int 0
-                        |> Random.generate RandomGenerate
+                      }
+                    , if model.animationInterval < model.animationCount then
+                        Array.length model.unselectedGroup
+                            |> (\n -> n - 1)
+                            |> Random.int 0
+                            |> Random.generate RandomGenerate
 
-                  else
-                    Cmd.none
-                )
+                      else
+                        Cmd.none
+                    )
 
             else
                 ( model, Cmd.none )
@@ -158,7 +160,6 @@ view model =
             )
         , lift button [] [ Neat.text "まわす" ]
             |> setMixin (Mixin.fromAttribute (onClick <| Rollstart (Json.Encode.int 0)))
-        , Neat.text <| Debug.toString model.rollstatus
         ]
         |> toPage
         |> Html.div []

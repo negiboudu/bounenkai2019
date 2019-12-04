@@ -5712,6 +5712,8 @@ var $elm$core$Array$length = function (_v0) {
 	return len;
 };
 var $elm$core$Basics$neq = _Utils_notEqual;
+var $elm$json$Json$Encode$int = _Json_wrap;
+var $author$project$Main$rollend = _Platform_outgoingPort('rollend', $elm$json$Json$Encode$int);
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -5733,8 +5735,8 @@ var $author$project$Main$update = F2(
 						}),
 					$elm$core$Platform$Cmd$none);
 			default:
-				return _Utils_eq(model.rollstatus, $author$project$Main$Rolling) ? _Utils_Tuple2(
-					(_Utils_cmp(model.animationInterval, model.animationIntervalLimit) > 0) ? _Utils_update(
+				return _Utils_eq(model.rollstatus, $author$project$Main$Rolling) ? ((_Utils_cmp(model.animationInterval, model.animationIntervalLimit) > 0) ? _Utils_Tuple2(
+					_Utils_update(
 						model,
 						{
 							animationCount: 0,
@@ -5747,7 +5749,9 @@ var $author$project$Main$update = F2(
 									return !_Utils_eq(val, model.tempSelection);
 								},
 								model.unselectedGroup)
-						}) : _Utils_update(
+						}),
+					$author$project$Main$rollend(0)) : _Utils_Tuple2(
+					_Utils_update(
 						model,
 						{animationCount: model.animationCount + 1}),
 					(_Utils_cmp(model.animationInterval, model.animationCount) < 0) ? A2(
@@ -5759,7 +5763,7 @@ var $author$project$Main$update = F2(
 							function (n) {
 								return n - 1;
 							}(
-								$elm$core$Array$length(model.unselectedGroup)))) : $elm$core$Platform$Cmd$none) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+								$elm$core$Array$length(model.unselectedGroup)))) : $elm$core$Platform$Cmd$none)) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 		}
 	});
 var $arowM$elm_neat_layout$Neat$Layout$Column$HCenter = {$: 'HCenter'};
@@ -6226,7 +6230,6 @@ var $arowM$elm_neat_layout$Neat$Layout$Column$defaultColumn = {horizontal: $arow
 var $arowM$elm_neat_layout$Neat$Layout$Row$Left = {$: 'Left'};
 var $arowM$elm_neat_layout$Neat$Layout$Row$Top = {$: 'Top'};
 var $arowM$elm_neat_layout$Neat$Layout$Row$defaultRow = {horizontal: $arowM$elm_neat_layout$Neat$Layout$Row$Left, nodeName: 'div', vertical: $arowM$elm_neat_layout$Neat$Layout$Row$Top, wrap: false};
-var $elm$json$Json$Encode$int = _Json_wrap;
 var $author$project$Main$monitorPadding = $arowM$elm_neat_layout$Neat$IsPadding(
 	{rem: 0.1});
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
@@ -6414,7 +6417,6 @@ var $arowM$elm_neat_layout$Neat$toPage = function (v) {
 			A4($arowM$elm_neat_layout$Neat$toHtml, 0, $arowM$elm_neat_layout$Neat$Layout$Internal$none, $arowM$elm_mixin$Mixin$none, v)
 		]);
 };
-var $elm$core$Debug$toString = _Debug_toString;
 var $author$project$Main$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
@@ -6462,9 +6464,7 @@ var $author$project$Main$view = function (model) {
 							_List_fromArray(
 								[
 									$arowM$elm_neat_layout$Neat$text('まわす')
-								]))),
-						$arowM$elm_neat_layout$Neat$text(
-						$elm$core$Debug$toString(model.rollstatus))
+								])))
 					]))));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
