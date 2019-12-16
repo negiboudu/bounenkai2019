@@ -61,9 +61,11 @@ init _ =
 
 createGroup : Array String
 createGroup =
-    Array.initialize 100 identity
+    Array.initialize 76 identity
+        |> Array.slice 1 76
         |> Array.map String.fromInt
-        |> Array.push "SP"
+        |> Array.push "SP1"
+        |> Array.push "SP2"
 
 
 type Msg
